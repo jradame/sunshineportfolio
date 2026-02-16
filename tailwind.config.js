@@ -26,9 +26,10 @@ export default {
         flash: "14px",
       },
       fontFamily: {
-        display: ["ui-serif", "Georgia", "serif"],
-        body: ["ui-sans-serif", "system-ui", "sans-serif"],
-      },
+  display: ["Rye", "ui-serif", "Georgia", "serif"],
+  body: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+},
+
     },
   },
   plugins: [],

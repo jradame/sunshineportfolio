@@ -10,6 +10,7 @@ body {
   @apply bg-paper text-ink font-body;
 }
 
+
 .paper-grain {
   /* coffee-stained paper + subtle grain */
   background-color: #f3e2c7; /* warm paper */
