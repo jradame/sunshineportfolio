@@ -4,15 +4,23 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Base
+        ink: "#000000",
+
+        // Paper background
         paper: "#F5E7D3",
-        ink: "#111111",
-        red: "#C73B2F",
-        mustard: "#C8A100",
-        teal: "#1F8A8A",
+
+        // Traditional palette
+        crimson: "#DC143C",
+        forest: "#228B22",
+        gold: "#FFD700",
+        rope: "#8B4513",
+        pastel: "#4EC64E",
+        palm: "#0E390E",
       },
       boxShadow: {
-        flash: "6px 6px 0 #111111",
-        flashSoft: "10px 10px 0 rgba(17,17,17,0.25)",
+        flash: "6px 6px 0 #000000",
+        flashSoft: "10px 10px 0 rgba(0,0,0,0.25)",
       },
       borderRadius: {
         flash: "14px",

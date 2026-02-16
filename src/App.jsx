@@ -1,39 +1,33 @@
 import React, { useEffect, useMemo, useState } from "react";
+import heroTattooingUrl from "./images/hero.png";
 
-/**
- * QUICK CUSTOMIZATION:
- * - Replace avatarUrl + heroTattooingUrl + image URLs with your own.
- *   Easiest: put images in /public and use "/yourfile.jpg"
- * - Update name / location / IG / email in Header + Footer + Contact panel.
- */
+
 
 const avatarUrl =
   "https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&w=200&q=80";
-const heroTattooingUrl =
-  "https://images.unsplash.com/photo-1542728928-1413d1894ed1?auto=format&fit=crop&w=1400&q=80";
 
-const carouselItems = [
-  {
-    title: "Fresh Flash",
-    subtitle: "Latest designs",
-    img: "https://images.unsplash.com/photo-1520975869018-0f66b9559d2b?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    title: "Healed",
-    subtitle: "Proof it lasts",
-    img: "https://images.unsplash.com/photo-1520975693411-87a8b2a2f3ad?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    title: "Color",
-    subtitle: "Bold & solid",
-    img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    title: "Linework",
-    subtitle: "Clean & crisp",
-    img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-  },
-];
+// const carouselItems = [
+//   {
+//     title: "Fresh Flash",
+//     subtitle: "Latest designs",
+//     img: "https://images.unsplash.com/photo-1520975869018-0f66b9559d2b?auto=format&fit=crop&w=900&q=80",
+//   },
+//   {
+//     title: "Healed",
+//     subtitle: "Proof it lasts",
+//     img: "https://images.unsplash.com/photo-1520975693411-87a8b2a2f3ad?auto=format&fit=crop&w=900&q=80",
+//   },
+//   {
+//     title: "Color",
+//     subtitle: "Bold & solid",
+//     img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80",
+//   },
+//   {
+//     title: "Linework",
+//     subtitle: "Clean & crisp",
+//     img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+//   },
+// ];
 
 const styleCards = [
   {
@@ -41,23 +35,21 @@ const styleCards = [
     desc: "Bold lines, classic motifs, strong color.",
     img: "https://images.unsplash.com/photo-1542728928-1413d1894ed1?auto=format&fit=crop&w=1200&q=80",
     href: "#portfolio",
-    accent: "bg-red",
   },
   {
     title: "Neo-Traditional",
     desc: "Classic foundation with modern detail.",
     img: "https://images.unsplash.com/photo-1520975869018-0f66b9559d2b?auto=format&fit=crop&w=1200&q=80",
     href: "#portfolio",
-    accent: "bg-mustard",
   },
   {
     title: "Blackwork",
     desc: "Dark, graphic, and high contrast.",
     img: "https://images.unsplash.com/photo-1520975693411-87a8b2a2f3ad?auto=format&fit=crop&w=1200&q=80",
     href: "#portfolio",
-    accent: "bg-teal",
   },
 ];
+
 
 function cx(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -89,10 +81,11 @@ function IconArrow() {
 }
 
 function Badge({ children, tone = "red" }) {
+  // Map your existing tone names to your new palette
   const toneMap = {
-    red: "border-ink bg-red text-paper",
-    teal: "border-ink bg-teal text-paper",
-    mustard: "border-ink bg-mustard text-ink",
+    red: "border-ink bg-crimson text-paper",
+    teal: "border-ink bg-forest text-paper",
+    mustard: "border-ink bg-gold text-ink",
     ink: "border-ink bg-ink text-paper",
   };
   return (
@@ -109,8 +102,8 @@ function Badge({ children, tone = "red" }) {
 
 /**
  * SlidePanel:
- * - side="left": enters from left, exits to right (your requirement)
- * - side="right": enters from right, exits to left (your requirement)
+ * - side="left": enters from left, exits to right
+ * - side="right": enters from right, exits to left
  */
 function SlidePanel({ open, onClose, side = "left", title, children }) {
   useLockBodyScroll(open);
@@ -133,7 +126,6 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
 
   const exitTransform =
     side === "left" ? "translate-x-[110%]" : "translate-x-[-110%]";
-
   const enterTransform =
     side === "left" ? "translate-x-[-110%]" : "translate-x-[110%]";
 
@@ -210,10 +202,11 @@ function Button({ as = "button", href, onClick, children, variant = "primary" })
     "inline-flex items-center justify-center gap-2 rounded-flash border-[3px] border-ink px-5 py-3 font-black tracking-wide shadow-flash transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none";
   const styles =
     variant === "primary"
-      ? "bg-red text-paper hover:bg-red/95"
+      ? "bg-crimson text-paper hover:bg-crimson/95"
       : variant === "ink"
       ? "bg-ink text-paper hover:bg-ink/95"
       : "bg-paper text-ink hover:bg-paper/80";
+
   const props = Comp === "a" ? { href } : { onClick };
   return (
     <Comp
@@ -243,42 +236,42 @@ function SectionTitle({ kicker, title, tone = "mustard" }) {
   );
 }
 
-function HorizontalCarousel({ items }) {
-  return (
-    <div className="relative">
-      <div
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 pr-2"
-        style={{ WebkitOverflowScrolling: "touch" }}
-      >
-        {items.map((it, idx) => (
-          <article
-            key={idx}
-            className="min-w-[230px] max-w-[260px] snap-start overflow-hidden rounded-flash border-4 border-ink bg-paper shadow-flash"
-          >
-            <div className="relative h-28 w-full">
-              <img
-                src={it.img}
-                alt={it.title}
-                className="h-full w-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
-            </div>
-            <div className="p-3">
-              <div className="font-display text-lg font-black">{it.title}</div>
-              <div className="text-sm font-semibold opacity-80">
-                {it.subtitle}
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-      <div className="text-xs font-semibold opacity-70">Swipe / scroll →</div>
-    </div>
-  );
-}
+// function HorizontalCarousel({ items }) {
+//   return (
+//     <div className="relative">
+//       <div
+//         className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 pr-2"
+//         style={{ WebkitOverflowScrolling: "touch" }}
+//       >
+//         {items.map((it, idx) => (
+//           <article
+//             key={idx}
+//             className="min-w-[230px] max-w-[260px] snap-start overflow-hidden rounded-flash border-4 border-ink bg-paper shadow-flash"
+//           >
+//             <div className="relative h-28 w-full">
+//               <img
+//                 src={it.img}
+//                 alt={it.title}
+//                 className="h-full w-full object-cover"
+//                 loading="lazy"
+//               />
+//               <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
+//             </div>
+//             <div className="p-3">
+//               <div className="font-display text-lg font-black">{it.title}</div>
+//               <div className="text-sm font-semibold opacity-80">
+//                 {it.subtitle}
+//               </div>
+//             </div>
+//           </article>
+//         ))}
+//       </div>
+//       <div className="text-xs font-semibold opacity-70">Swipe / scroll →</div>
+//     </div>
+//   );
+// }
 
-function StyleCard({ title, desc, img, href, accent }) {
+function StyleCard({ title, desc, img, href }) {
   return (
     <a
       href={href}
@@ -292,13 +285,8 @@ function StyleCard({ title, desc, img, href, accent }) {
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/45 to-transparent" />
-        <div
-          className={cx(
-            "absolute left-4 top-4 h-3 w-20 rounded-full border-2 border-ink",
-            accent
-          )}
-        />
       </div>
+
       <div className="p-4">
         <div className="flex items-center justify-between">
           <h3 className="font-display text-2xl font-black">{title}</h3>
@@ -312,6 +300,7 @@ function StyleCard({ title, desc, img, href, accent }) {
   );
 }
 
+
 export default function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -324,7 +313,11 @@ export default function App() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 overflow-hidden rounded-full border-4 border-ink shadow-flash">
-              <img src={avatarUrl} alt="Artist portrait" className="h-full w-full object-cover" />
+              <img
+                src={avatarUrl}
+                alt="Artist portrait"
+                className="h-full w-full object-cover"
+              />
             </div>
             <div>
               <div className="font-display text-xl font-black leading-none">
@@ -353,7 +346,7 @@ export default function App() {
 
             <button
               onClick={() => setContactOpen(true)}
-              className="rounded-flash border-2 border-ink bg-red px-3 py-2 text-sm font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+              className="rounded-flash border-2 border-ink bg-crimson px-3 py-2 text-sm font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
             >
               Contact
             </button>
@@ -362,7 +355,12 @@ export default function App() {
       </header>
 
       {/* ABOUT PANEL */}
-      <SlidePanel open={aboutOpen} onClose={() => setAboutOpen(false)} side="left" title="About the Artist">
+      <SlidePanel
+        open={aboutOpen}
+        onClose={() => setAboutOpen(false)}
+        side="left"
+        title="About the Artist"
+      >
         <div className="space-y-4">
           <p className="text-sm font-semibold leading-relaxed opacity-90">
             Drop your quick bio here: what you love tattooing, where you work,
@@ -387,18 +385,22 @@ export default function App() {
       </SlidePanel>
 
       {/* CONTACT PANEL */}
-      <SlidePanel open={contactOpen} onClose={() => setContactOpen(false)} side="right" title="Booking / Contact">
+      <SlidePanel
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        side="right"
+        title="Booking / Contact"
+      >
         <div className="space-y-4">
           <div className="rounded-flash border-4 border-ink bg-paper p-4 shadow-flash">
             <div className="font-display text-lg font-black">Fast contact</div>
             <div className="mt-2 space-y-2 text-sm font-black">
               <div>
-  Email: <span className="font-black">coming soon</span>
-</div>
-<div>
-  Instagram: <span className="font-black">coming soon</span>
-</div>
-
+                Email: <span className="font-black">coming soon</span>
+              </div>
+              <div>
+                Instagram: <span className="font-black">coming soon</span>
+              </div>
             </div>
           </div>
 
@@ -414,7 +416,7 @@ export default function App() {
               <label className="grid gap-1 text-sm font-black">
                 Name
                 <input
-                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-teal/30"
+                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-forest/30"
                   placeholder="Your name"
                   required
                 />
@@ -424,7 +426,7 @@ export default function App() {
                 Email
                 <input
                   type="email"
-                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-teal/30"
+                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-forest/30"
                   placeholder="you@email.com"
                   required
                 />
@@ -433,7 +435,7 @@ export default function App() {
               <label className="grid gap-1 text-sm font-black">
                 What are you thinking?
                 <textarea
-                  className="min-h-[96px] rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-teal/30"
+                  className="min-h-[96px] rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-forest/30"
                   placeholder="Placement, size, reference, budget, dates…"
                   required
                 />
@@ -459,12 +461,13 @@ export default function App() {
         {/* HERO */}
         <section className="grid items-stretch gap-6 lg:grid-cols-2">
           <div className="overflow-hidden rounded-flash border-4 border-ink bg-paper shadow-flash">
-            <div className="relative h-[360px] w-full sm:h-[420px]">
-              <img src={heroTattooingUrl} alt="Tattooing in progress" className="h-full w-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
-              <div className="absolute bottom-4 left-4">
-                <Badge tone="ink">IN THE SHOP</Badge>
-              </div>
+            <div className="relative">
+              <img
+                src={heroTattooingUrl}
+                alt="Tattooing in progress"
+                className="block h-auto w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/35 to-transparent" />
             </div>
           </div>
 
@@ -480,12 +483,16 @@ export default function App() {
             </h1>
 
             <p className="mt-3 text-sm font-semibold leading-relaxed opacity-85">
-              Quick intro: what you specialize in, where you tattoo, and what you
-              love doing most. Keep it short so people hit the button.
+              Quick intro: what you specialize in, where you tattoo, and what
+              you love doing most. Keep it short so people hit the button.
             </p>
 
             <div className="mt-5 flex flex-wrap gap-3">
-              <Button as="button" onClick={() => setContactOpen(true)} variant="primary">
+              <Button
+                as="button"
+                onClick={() => setContactOpen(true)}
+                variant="primary"
+              >
                 Book / Inquire
               </Button>
               <Button as="a" href="#portfolio" variant="secondary">
@@ -493,19 +500,17 @@ export default function App() {
               </Button>
             </div>
 
-            <div className="mt-6">
-              <div className="mb-3 flex items-center justify-between">
-                <div className="font-display text-xl font-black">Highlights</div>
-                <span className="text-xs font-black opacity-70">swipe →</span>
-              </div>
-              <HorizontalCarousel items={carouselItems} />
-            </div>
+          
           </div>
         </section>
 
         {/* STYLE LINKS */}
         <section id="portfolio" className="mt-14">
-          <SectionTitle kicker="PORTFOLIO" title="Pick a lane (or cruise them all)." tone="mustard" />
+          <SectionTitle
+            kicker="PORTFOLIO"
+            title="Pick a lane (or cruise them all)."
+            tone="mustard"
+          />
           <div className="grid gap-6 md:grid-cols-3">
             {styleCards.map((c) => (
               <StyleCard key={c.title} {...c} />
@@ -515,23 +520,30 @@ export default function App() {
           <div className="mt-8 rounded-flash border-4 border-ink bg-paper p-5 shadow-flash">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="font-display text-2xl font-black">Want a full gallery?</div>
+                <div className="font-display text-2xl font-black">
+                  Want a full gallery?
+                </div>
                 <div className="text-sm font-semibold opacity-80">
                   Next we’ll add a real Portfolio page with categories + grid.
                 </div>
               </div>
+
               <div className="flex gap-3">
                 <button
-  type="button"
-  disabled
-  className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-flash border-[3px] border-ink bg-ink/85 px-5 py-3 font-black tracking-wide text-paper opacity-60 shadow-flash"
-  title="Coming soon"
->
-  Instagram
-  <IconArrow />
-</button>
+                  type="button"
+                  disabled
+                  className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-flash border-[3px] border-ink bg-ink/85 px-5 py-3 font-black tracking-wide text-paper opacity-60 shadow-flash"
+                  title="Coming soon"
+                >
+                  Instagram
+                  <IconArrow />
+                </button>
 
-                <Button as="button" onClick={() => setContactOpen(true)} variant="primary">
+                <Button
+                  as="button"
+                  onClick={() => setContactOpen(true)}
+                  variant="primary"
+                >
                   Contact
                 </Button>
               </div>
@@ -544,21 +556,24 @@ export default function App() {
       <footer className="border-t-4 border-ink bg-paper">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:grid-cols-3">
           <div className="space-y-2">
-            <div className="font-display text-xl font-black">Sunshine Tattoo</div>
+            <div className="font-display text-xl font-black">
+              Sunshine Tattoo
+            </div>
             <div className="text-sm font-semibold opacity-80">
               Tattooing at <span className="underline">Shop Name</span>
             </div>
-            <div className="text-sm font-semibold opacity-80">City, State • By appointment</div>
+            <div className="text-sm font-semibold opacity-80">
+              City, State • By appointment
+            </div>
           </div>
 
           <div className="space-y-2 sm:text-center">
             <div className="font-display text-xl font-black">Links</div>
-           <div className="text-sm font-black">
-  <span className="opacity-70">Instagram (coming soon)</span>
-  {" • "}
-  <span className="opacity-70">Email (coming soon)</span>
-</div>
-
+            <div className="text-sm font-black">
+              <span className="opacity-70">Instagram (coming soon)</span>
+              {" • "}
+              <span className="opacity-70">Email (coming soon)</span>
+            </div>
             <div className="text-xs font-semibold opacity-70">
               Add “Aftercare” + “Policies” when ready.
             </div>
@@ -568,11 +583,13 @@ export default function App() {
             <div className="font-display text-xl font-black">Booking</div>
             <button
               onClick={() => setContactOpen(true)}
-              className="inline-flex rounded-flash border-[3px] border-ink bg-red px-5 py-3 font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="inline-flex rounded-flash border-[3px] border-ink bg-crimson px-5 py-3 font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
             >
               Open Contact
             </button>
-            <div className="text-xs font-semibold opacity-70">© {year} • All work belongs to the artist</div>
+            <div className="text-xs font-semibold opacity-70">
+              © {year} • All work belongs to the artist
+            </div>
           </div>
         </div>
       </footer>

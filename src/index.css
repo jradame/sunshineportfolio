@@ -10,11 +10,16 @@ body {
   @apply bg-paper text-ink font-body;
 }
 
-/* Subtle “paper” grain */
 .paper-grain {
+  /* coffee-stained paper + subtle grain */
+  background-color: #f3e2c7; /* warm paper */
   background-image:
-    radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
-    radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
-  background-size: 18px 18px, 28px 28px;
-  background-position: 0 0, 12px 8px;
+    radial-gradient(closest-side at 18% 22%, rgba(124, 74, 35, 0.18), transparent 60%),
+    radial-gradient(closest-side at 82% 30%, rgba(124, 74, 35, 0.14), transparent 55%),
+    radial-gradient(closest-side at 30% 78%, rgba(124, 74, 35, 0.12), transparent 58%),
+    radial-gradient(rgba(0,0,0,0.055) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.035) 1px, transparent 1px);
+  background-size: auto, auto, auto, 18px 18px, 28px 28px;
+  background-position: center, center, center, 0 0, 12px 8px;
 }
+
