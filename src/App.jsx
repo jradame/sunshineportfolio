@@ -1,6 +1,9 @@
-// src/App.jsx
 import React, { useEffect, useMemo, useState } from "react";
+
 import heroTattooingUrl from "./images/hero.png";
+import traditionalImg from "./images/eye.png";
+import neoTraditionalImg from "./images/japanese.png";
+import blackworkImg from "./images/blackskull.png";
 
 const avatarUrl =
   "https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&w=200&q=80";
@@ -9,19 +12,19 @@ const styleCards = [
   {
     title: "Traditional",
     desc: "Bold lines, classic motifs, strong color.",
-    img: "https://images.unsplash.com/photo-1542728928-1413d1894ed1?auto=format&fit=crop&w=1200&q=80",
+    img: traditionalImg,
     href: "#portfolio",
   },
   {
     title: "Neo-Traditional",
     desc: "Classic foundation with modern detail.",
-    img: "https://images.unsplash.com/photo-1520975869018-0f66b9559d2b?auto=format&fit=crop&w=1200&q=80",
+    img: neoTraditionalImg,
     href: "#portfolio",
   },
   {
     title: "Blackwork",
     desc: "Dark, graphic, and high contrast.",
-    img: "https://images.unsplash.com/photo-1520975693411-87a8b2a2f3ad?auto=format&fit=crop&w=1200&q=80",
+    img: blackworkImg,
     href: "#portfolio",
   },
 ];
@@ -55,32 +58,6 @@ function IconArrow() {
   );
 }
 
-function Badge({ children, tone = "red" }) {
-  // Option A — Vintage Flash mapping
-  const toneMap = {
-    red: "border-ink bg-primary text-paper",
-    teal: "border-ink bg-secondary text-paper",
-    mustard: "border-ink bg-accent text-ink",
-    ink: "border-ink bg-ink text-paper",
-  };
-
-  return (
-    <span
-      className={cx(
-        "inline-flex items-center gap-2 rounded-full border-2 px-3 py-1 text-sm font-black tracking-wide shadow-flash",
-        toneMap[tone] || toneMap.red
-      )}
-    >
-      {children}
-    </span>
-  );
-}
-
-/**
- * SlidePanel:
- * - side="left": enters from left, exits to right
- * - side="right": enters from right, exits to left
- */
 function SlidePanel({ open, onClose, side = "left", title, children }) {
   useLockBodyScroll(open);
 
@@ -132,36 +109,28 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
       <button
         onClick={startClose}
         className={cx(
-          "absolute inset-0 bg-ink/60 transition-opacity duration-200",
+          "absolute inset-0 bg-black/70 transition-opacity duration-200",
           open ? "opacity-100" : "opacity-0"
         )}
         aria-label="Close overlay"
       />
-
       <aside
         className={cx(
-          "absolute top-0 h-full w-[92%] max-w-md paper-grain border-4 border-ink bg-paper shadow-flashSoft",
+          "absolute top-0 h-full w-[92%] max-w-md bg-zinc-950 text-zinc-100",
+          "border-l border-white/10 shadow-2xl",
           "transition-transform duration-200 ease-out will-change-transform",
-          side === "left" ? "left-0" : "right-0",
+          side === "left" ? "left-0 border-r border-white/10" : "right-0",
           panelTransform
         )}
         role="dialog"
         aria-modal="true"
         aria-label={title}
       >
-        <div className="flex items-center justify-between border-b-4 border-ink p-4">
-          <div className="flex items-center gap-3">
-            <Badge tone={side === "left" ? "teal" : "red"}>
-              {side === "left" ? "ABOUT" : "CONTACT"}
-            </Badge>
-            <h2 className="font-display text-xl font-black tracking-wide">
-              {title}
-            </h2>
-          </div>
-
+        <div className="flex items-center justify-between border-b border-white/10 p-4">
+          <h2 className="text-lg font-black tracking-wide">{title}</h2>
           <button
             onClick={startClose}
-            className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-black shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm font-black hover:bg-white/10"
           >
             Close
           </button>
@@ -175,44 +144,19 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
 
 function Button({ as = "button", href, onClick, children, variant = "primary" }) {
   const Comp = as;
-
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-flash border-[3px] border-ink px-5 py-3 font-black tracking-wide shadow-flash transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none";
-
+    "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-black transition active:translate-y-[1px]";
   const styles =
     variant === "primary"
-      ? "bg-primary text-paper hover:bg-primary/95"
-      : variant === "ink"
-      ? "bg-ink text-paper hover:bg-ink/95"
-      : "bg-paper text-ink hover:bg-paper/80";
-
+      ? "bg-red-600 text-white shadow-lg shadow-black/30 hover:bg-red-500"
+      : "bg-white/10 text-white border border-white/10 hover:bg-white/15";
   const props = Comp === "a" ? { href } : { onClick };
 
   return (
-    <Comp
-      {...props}
-      className={cx(
-        base,
-        styles,
-        "hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-      )}
-    >
+    <Comp {...props} className={cx(base, styles)}>
       {children}
       <IconArrow />
     </Comp>
-  );
-}
-
-function SectionTitle({ kicker, title, tone = "mustard" }) {
-  return (
-    <div className="mb-5">
-      <div className="mb-2">
-        <Badge tone={tone}>{kicker}</Badge>
-      </div>
-      <h2 className="font-display text-3xl font-black tracking-tight sm:text-4xl">
-        {title}
-      </h2>
-    </div>
   );
 }
 
@@ -220,26 +164,20 @@ function StyleCard({ title, desc, img, href }) {
   return (
     <a
       href={href}
-      className="group block overflow-hidden rounded-flash border-4 border-ink card-paper shadow-flash transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+      className="group block overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 shadow-xl shadow-black/30 hover:bg-white/[0.08] transition"
     >
       <div className="relative h-48 w-full">
-        <img
-          src={img}
-          alt={title}
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/45 to-transparent" />
+        <img src={img} alt={title} className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
       </div>
-
-      <div className="p-4">
+      <div className="p-4 text-white">
         <div className="flex items-center justify-between">
-          <h3 className="font-display text-2xl font-black">{title}</h3>
-          <span className="rounded-full border-2 border-ink bg-paper px-3 py-1 text-sm font-black shadow-flash group-hover:shadow-none">
+          <h3 className="text-xl font-black">{title}</h3>
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black ring-1 ring-white/10">
             View
           </span>
         </div>
-        <p className="mt-2 text-sm font-semibold opacity-80">{desc}</p>
+        <p className="mt-2 text-sm font-semibold text-white/75">{desc}</p>
       </div>
     </a>
   );
@@ -251,24 +189,23 @@ export default function App() {
   const year = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    <div className="paper-grain min-h-screen">
+    <div className="min-h-screen bg-zinc-950 text-white">
       {/* HEADER */}
-      <header className="sticky top-0 z-40 border-b-4 border-ink bg-paper/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 overflow-hidden rounded-full border-4 border-ink shadow-flash">
+            <div className="h-12 w-12 overflow-hidden rounded-full ring-1 ring-white/15">
               <img
                 src={avatarUrl}
                 alt="Artist portrait"
                 className="h-full w-full object-cover"
               />
             </div>
-
             <div>
-              <div className="font-display text-xl font-black leading-none text-shadow-gold">
+              <div className="text-lg font-black leading-none">
                 Sunshine Tattoo
               </div>
-              <div className="text-xs font-semibold opacity-75">
+              <div className="text-xs font-semibold text-white/70">
                 Traditional Tattoo • Your City (edit me)
               </div>
             </div>
@@ -277,21 +214,19 @@ export default function App() {
           <nav className="flex items-center gap-2">
             <a
               href="#portfolio"
-              className="hidden rounded-flash border-2 border-ink bg-paper px-3 py-2 text-sm font-black shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none sm:inline-flex"
+              className="hidden rounded-xl bg-white/10 px-3 py-2 text-sm font-black ring-1 ring-white/10 hover:bg-white/15 sm:inline-flex"
             >
               Portfolio
             </a>
-
             <button
               onClick={() => setAboutOpen(true)}
-              className="rounded-flash border-2 border-ink bg-paper px-3 py-2 text-sm font-black shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+              className="rounded-xl bg-white/10 px-3 py-2 text-sm font-black ring-1 ring-white/10 hover:bg-white/15"
             >
               About
             </button>
-
             <button
               onClick={() => setContactOpen(true)}
-              className="rounded-flash border-2 border-ink bg-primary px-3 py-2 text-sm font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+              className="rounded-xl bg-red-600 px-3 py-2 text-sm font-black text-white hover:bg-red-500"
             >
               Contact
             </button>
@@ -306,25 +241,18 @@ export default function App() {
         side="left"
         title="About the Artist"
       >
-        <div className="space-y-4">
-          <p className="text-sm font-semibold leading-relaxed opacity-90">
+        <div className="space-y-4 text-sm font-semibold text-white/85">
+          <p>
             Drop your quick bio here: what you love tattooing, where you work,
-            and how you book. Keep it punchy.
+            and how you book.
           </p>
-
-          <div className="rounded-flash border-4 border-ink card-paper p-4 shadow-flash">
-            <div className="font-display text-lg font-black">Specialties</div>
-            <ul className="mt-2 list-disc pl-5 text-sm font-semibold opacity-85">
+          <div className="rounded-xl bg-white/5 p-4 ring-1 ring-white/10">
+            <div className="text-base font-black text-white">Specialties</div>
+            <ul className="mt-2 list-disc pl-5 text-white/80">
               <li>American Traditional</li>
               <li>Flash + small bangers</li>
               <li>Custom classic motifs</li>
             </ul>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <Badge tone="mustard">Bold</Badge>
-            <Badge tone="teal">Clean</Badge>
-            <Badge tone="red">Classic</Badge>
           </div>
         </div>
       </SlidePanel>
@@ -336,68 +264,16 @@ export default function App() {
         side="right"
         title="Booking / Contact"
       >
-        <div className="space-y-4">
-          <div className="rounded-flash border-4 border-ink card-paper p-4 shadow-flash">
-            <div className="font-display text-lg font-black">Fast contact</div>
-            <div className="mt-2 space-y-2 text-sm font-black">
-              <div>
-                Email: <span className="font-black">coming soon</span>
-              </div>
-              <div>
-                Instagram: <span className="font-black">coming soon</span>
-              </div>
+        <div className="space-y-4 text-sm font-semibold text-white/85">
+          <div className="rounded-xl bg-white/5 p-4 ring-1 ring-white/10">
+            <div className="text-base font-black text-white">Fast contact</div>
+            <div className="mt-2 space-y-2 text-white/80">
+              <div>Email: coming soon</div>
+              <div>Instagram: coming soon</div>
             </div>
           </div>
-
-          <form
-            className="rounded-flash border-4 border-ink card-paper p-4 shadow-flash"
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("Next: wire this to Formspree/EmailJS 👍");
-            }}
-          >
-            <div className="font-display text-lg font-black">Quick inquiry</div>
-
-            <div className="mt-3 grid gap-3">
-              <label className="grid gap-1 text-sm font-black">
-                Name
-                <input
-                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-secondary/30"
-                  placeholder="Your name"
-                  required
-                />
-              </label>
-
-              <label className="grid gap-1 text-sm font-black">
-                Email
-                <input
-                  type="email"
-                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-secondary/30"
-                  placeholder="you@email.com"
-                  required
-                />
-              </label>
-
-              <label className="grid gap-1 text-sm font-black">
-                What are you thinking?
-                <textarea
-                  className="min-h-[96px] rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-secondary/30"
-                  placeholder="Placement, size, reference, budget, dates…"
-                  required
-                />
-              </label>
-
-              <button
-                type="submit"
-                className="rounded-flash border-[3px] border-ink bg-ink px-5 py-3 font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
-              >
-                Send
-              </button>
-            </div>
-          </form>
-
-          <p className="text-xs font-semibold opacity-75">
-            Pro move: add “Healed” photos + booking rules here.
+          <p className="text-xs text-white/60">
+            When you’re ready, we’ll wire this to a real form (Formspree/EmailJS).
           </p>
         </div>
       </SlidePanel>
@@ -405,156 +281,93 @@ export default function App() {
       {/* MAIN */}
       <main className="mx-auto max-w-6xl px-4 py-10">
         {/* HERO */}
-        <section className="grid items-stretch gap-6 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-flash border-4 border-ink bg-paper shadow-flash">
-            <div className="relative">
-              <img
-                src={heroTattooingUrl}
-                alt="Tattooing in progress"
-                className="block h-auto w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/35 to-transparent" />
-            </div>
+        <section className="grid gap-6 lg:grid-cols-2">
+          <div className="overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 shadow-2xl shadow-black/40">
+            <img
+              src={heroTattooingUrl}
+              alt="Tattooing in progress"
+              className="block h-auto w-full object-cover"
+            />
           </div>
 
-          {/* HERO RIGHT CARD (no badges) */}
-          <div className="rounded-flash border-4 border-ink card-paper p-6 shadow-flash">
-            <h1 className="font-display text-5xl font-black leading-[0.95] sm:text-6xl text-shadow-gold">
-              Sunshine Tattoo
+          <div className="rounded-2xl bg-white/[0.06] p-6 ring-1 ring-white/10 shadow-2xl shadow-black/40">
+            <h1 className="text-4xl font-black leading-tight sm:text-5xl">
+              Traditional work with bold color pops.
             </h1>
-
-            <p className="mt-2 text-sm font-black opacity-80">
-              Traditional • Flash • Custom
-            </p>
-
-            <p className="mt-4 text-sm font-semibold leading-relaxed opacity-85">
-              Bold lines, solid color, and readable designs that heal well and
-              age right. Walk-ins when I can, appointments always welcome.
+            <p className="mt-3 text-sm font-semibold text-white/75">
+              Quick intro: what you specialize in, where you tattoo, and what you love doing most.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button
-                as="button"
-                onClick={() => setContactOpen(true)}
-                variant="primary"
-              >
+              <Button as="button" onClick={() => setContactOpen(true)} variant="primary">
                 Book / Inquire
               </Button>
-
               <Button as="a" href="#portfolio" variant="secondary">
                 View Portfolio
               </Button>
             </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-flash border-2 border-ink bg-paper px-4 py-3 font-black shadow-flash">
-                <div className="text-xs opacity-70">Booking</div>
-                <div>Appointments</div>
-              </div>
-
-              <div className="rounded-flash border-2 border-ink bg-paper px-4 py-3 font-black shadow-flash">
-                <div className="text-xs opacity-70">Walk-ins</div>
-                <div>When available</div>
-              </div>
-
-              <div className="rounded-flash border-2 border-ink bg-paper px-4 py-3 font-black shadow-flash">
-                <div className="text-xs opacity-70">Location</div>
-                <div>Your City</div>
-              </div>
-            </div>
           </div>
         </section>
 
-        {/* STYLE LINKS */}
+        {/* PORTFOLIO */}
         <section id="portfolio" className="mt-14">
-          <SectionTitle
-            kicker="PORTFOLIO"
-            title="Pick a lane (or cruise them all)."
-            tone="mustard"
-          />
+          <h2 className="text-3xl font-black">Portfolio</h2>
+          <p className="mt-2 text-sm font-semibold text-white/70">
+            Placeholder images for now — we’ll replace with your real work next.
+          </p>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
             {styleCards.map((c) => (
               <StyleCard key={c.title} {...c} />
             ))}
           </div>
-
-          <div className="mt-8 rounded-flash border-4 border-ink card-paper p-5 shadow-flash">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="font-display text-2xl font-black">
-                  Want a full gallery?
-                </div>
-                <div className="text-sm font-semibold opacity-80">
-                  Next we’ll add a real Portfolio page with categories + grid.
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  disabled
-                  className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-flash border-[3px] border-ink bg-ink/85 px-5 py-3 font-black tracking-wide text-paper opacity-60 shadow-flash"
-                  title="Coming soon"
-                >
-                  Instagram
-                  <IconArrow />
-                </button>
-
-                <Button
-                  as="button"
-                  onClick={() => setContactOpen(true)}
-                  variant="primary"
-                >
-                  Contact
-                </Button>
-              </div>
-            </div>
-          </div>
         </section>
       </main>
 
-      {/* FOOTER */}
-      <footer className="border-t-4 border-ink bg-paper">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:grid-cols-3">
-          <div className="space-y-2">
-            <div className="font-display text-xl font-black text-shadow-gold">
-              Sunshine Tattoo
-            </div>
-            <div className="text-sm font-semibold opacity-80">
-              Tattooing at <span className="underline">Shop Name</span>
-            </div>
-            <div className="text-sm font-semibold opacity-80">
-              City, State • By appointment
-            </div>
-          </div>
-
-          <div className="space-y-2 sm:text-center">
-            <div className="font-display text-xl font-black">Links</div>
-            <div className="text-sm font-black">
-              <span className="opacity-70">Instagram (coming soon)</span>
-              {" • "}
-              <span className="opacity-70">Email (coming soon)</span>
-            </div>
-            <div className="text-xs font-semibold opacity-70">
-              Add “Aftercare” + “Policies” when ready.
-            </div>
-          </div>
-
-          <div className="space-y-3 sm:text-right">
-            <div className="font-display text-xl font-black">Booking</div>
-            <button
-              onClick={() => setContactOpen(true)}
-              className="inline-flex rounded-flash border-[3px] border-ink bg-primary px-5 py-3 font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
-            >
-              Open Contact
-            </button>
-            <div className="text-xs font-semibold opacity-70">
-              © {year} • All work belongs to the artist
-            </div>
-          </div>
+      {/* FOOTER (this WILL render) */}
+      <footer className="mt-16 border-t border-white/10 bg-zinc-950/60">
+  <div className="mx-auto max-w-6xl px-4 py-10">
+    <div className="grid gap-6 sm:grid-cols-3">
+      {/* Left */}
+      <div>
+        <div className="text-lg font-black">Sunshine Tattoo</div>
+        <div className="mt-2 text-sm font-semibold text-white/70">
+          Tattooing at <span className="underline">Saints and Sinners</span>
         </div>
-      </footer>
+        <div className="text-sm font-semibold text-white/70">
+          Carrollton, Texas • By appointment
+        </div>
+      </div>
+
+      {/* Middle */}
+      <div className="sm:text-center">
+        <div className="text-lg font-black">Links</div>
+        <div className="mt-2 text-sm font-semibold text-white/70">
+          Instagram (coming soon) • Email (coming soon)
+        </div>
+        <div className="mt-3 text-xs font-semibold text-white/50">
+          Add Aftercare + Policies when ready.
+        </div>
+      </div>
+
+      {/* Right */}
+      <div className="sm:text-right">
+        {/* <div className="text-lg font-black">Booking</div> */}
+        <button
+          onClick={() => setContactOpen(true)}
+          className="mt-3 inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-3 font-black text-white hover:bg-red-500 active:translate-y-[1px]"
+        >
+          BOOKING <IconArrow />
+        </button>
+
+        <div className="mt-4 text-xs font-semibold text-white/50">
+          © {year} • All work belongs to the artist
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
     </div>
   );
 }
