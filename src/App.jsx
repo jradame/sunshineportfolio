@@ -1,33 +1,9 @@
+// src/App.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import heroTattooingUrl from "./images/hero.png";
 
-
-
 const avatarUrl =
   "https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&w=200&q=80";
-
-// const carouselItems = [
-//   {
-//     title: "Fresh Flash",
-//     subtitle: "Latest designs",
-//     img: "https://images.unsplash.com/photo-1520975869018-0f66b9559d2b?auto=format&fit=crop&w=900&q=80",
-//   },
-//   {
-//     title: "Healed",
-//     subtitle: "Proof it lasts",
-//     img: "https://images.unsplash.com/photo-1520975693411-87a8b2a2f3ad?auto=format&fit=crop&w=900&q=80",
-//   },
-//   {
-//     title: "Color",
-//     subtitle: "Bold & solid",
-//     img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80",
-//   },
-//   {
-//     title: "Linework",
-//     subtitle: "Clean & crisp",
-//     img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-//   },
-// ];
 
 const styleCards = [
   {
@@ -49,7 +25,6 @@ const styleCards = [
     href: "#portfolio",
   },
 ];
-
 
 function cx(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -81,13 +56,14 @@ function IconArrow() {
 }
 
 function Badge({ children, tone = "red" }) {
-  // Map your existing tone names to your new palette
+  // Option A — Vintage Flash mapping
   const toneMap = {
-    red: "border-ink bg-crimson text-paper",
-    teal: "border-ink bg-forest text-paper",
-    mustard: "border-ink bg-gold text-ink",
+    red: "border-ink bg-primary text-paper",
+    teal: "border-ink bg-secondary text-paper",
+    mustard: "border-ink bg-accent text-ink",
     ink: "border-ink bg-ink text-paper",
   };
+
   return (
     <span
       className={cx(
@@ -182,6 +158,7 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
               {title}
             </h2>
           </div>
+
           <button
             onClick={startClose}
             className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-black shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
@@ -198,16 +175,19 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
 
 function Button({ as = "button", href, onClick, children, variant = "primary" }) {
   const Comp = as;
+
   const base =
     "inline-flex items-center justify-center gap-2 rounded-flash border-[3px] border-ink px-5 py-3 font-black tracking-wide shadow-flash transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none";
+
   const styles =
     variant === "primary"
-      ? "bg-crimson text-paper hover:bg-crimson/95"
+      ? "bg-primary text-paper hover:bg-primary/95"
       : variant === "ink"
       ? "bg-ink text-paper hover:bg-ink/95"
       : "bg-paper text-ink hover:bg-paper/80";
 
   const props = Comp === "a" ? { href } : { onClick };
+
   return (
     <Comp
       {...props}
@@ -236,46 +216,11 @@ function SectionTitle({ kicker, title, tone = "mustard" }) {
   );
 }
 
-// function HorizontalCarousel({ items }) {
-//   return (
-//     <div className="relative">
-//       <div
-//         className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 pr-2"
-//         style={{ WebkitOverflowScrolling: "touch" }}
-//       >
-//         {items.map((it, idx) => (
-//           <article
-//             key={idx}
-//             className="min-w-[230px] max-w-[260px] snap-start overflow-hidden rounded-flash border-4 border-ink bg-paper shadow-flash"
-//           >
-//             <div className="relative h-28 w-full">
-//               <img
-//                 src={it.img}
-//                 alt={it.title}
-//                 className="h-full w-full object-cover"
-//                 loading="lazy"
-//               />
-//               <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
-//             </div>
-//             <div className="p-3">
-//               <div className="font-display text-lg font-black">{it.title}</div>
-//               <div className="text-sm font-semibold opacity-80">
-//                 {it.subtitle}
-//               </div>
-//             </div>
-//           </article>
-//         ))}
-//       </div>
-//       <div className="text-xs font-semibold opacity-70">Swipe / scroll →</div>
-//     </div>
-//   );
-// }
-
 function StyleCard({ title, desc, img, href }) {
   return (
     <a
       href={href}
-      className="group block overflow-hidden rounded-flash border-4 border-ink bg-paper shadow-flash transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+      className="group block overflow-hidden rounded-flash border-4 border-ink card-paper shadow-flash transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
     >
       <div className="relative h-48 w-full">
         <img
@@ -300,7 +245,6 @@ function StyleCard({ title, desc, img, href }) {
   );
 }
 
-
 export default function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -319,8 +263,9 @@ export default function App() {
                 className="h-full w-full object-cover"
               />
             </div>
+
             <div>
-              <div className="font-display text-xl font-black leading-none">
+              <div className="font-display text-xl font-black leading-none text-shadow-gold">
                 Sunshine Tattoo
               </div>
               <div className="text-xs font-semibold opacity-75">
@@ -346,7 +291,7 @@ export default function App() {
 
             <button
               onClick={() => setContactOpen(true)}
-              className="rounded-flash border-2 border-ink bg-crimson px-3 py-2 text-sm font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+              className="rounded-flash border-2 border-ink bg-primary px-3 py-2 text-sm font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
             >
               Contact
             </button>
@@ -367,7 +312,7 @@ export default function App() {
             and how you book. Keep it punchy.
           </p>
 
-          <div className="rounded-flash border-4 border-ink bg-paper p-4 shadow-flash">
+          <div className="rounded-flash border-4 border-ink card-paper p-4 shadow-flash">
             <div className="font-display text-lg font-black">Specialties</div>
             <ul className="mt-2 list-disc pl-5 text-sm font-semibold opacity-85">
               <li>American Traditional</li>
@@ -392,7 +337,7 @@ export default function App() {
         title="Booking / Contact"
       >
         <div className="space-y-4">
-          <div className="rounded-flash border-4 border-ink bg-paper p-4 shadow-flash">
+          <div className="rounded-flash border-4 border-ink card-paper p-4 shadow-flash">
             <div className="font-display text-lg font-black">Fast contact</div>
             <div className="mt-2 space-y-2 text-sm font-black">
               <div>
@@ -405,18 +350,19 @@ export default function App() {
           </div>
 
           <form
-            className="rounded-flash border-4 border-ink bg-paper p-4 shadow-flash"
+            className="rounded-flash border-4 border-ink card-paper p-4 shadow-flash"
             onSubmit={(e) => {
               e.preventDefault();
               alert("Next: wire this to Formspree/EmailJS 👍");
             }}
           >
             <div className="font-display text-lg font-black">Quick inquiry</div>
+
             <div className="mt-3 grid gap-3">
               <label className="grid gap-1 text-sm font-black">
                 Name
                 <input
-                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-forest/30"
+                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-secondary/30"
                   placeholder="Your name"
                   required
                 />
@@ -426,7 +372,7 @@ export default function App() {
                 Email
                 <input
                   type="email"
-                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-forest/30"
+                  className="rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-secondary/30"
                   placeholder="you@email.com"
                   required
                 />
@@ -435,7 +381,7 @@ export default function App() {
               <label className="grid gap-1 text-sm font-black">
                 What are you thinking?
                 <textarea
-                  className="min-h-[96px] rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-forest/30"
+                  className="min-h-[96px] rounded-flash border-2 border-ink bg-paper px-3 py-2 font-semibold outline-none focus:ring-4 focus:ring-secondary/30"
                   placeholder="Placement, size, reference, budget, dates…"
                   required
                 />
@@ -471,23 +417,22 @@ export default function App() {
             </div>
           </div>
 
-          <div className="rounded-flash border-4 border-ink bg-paper p-6 shadow-flash">
-            <div className="flex flex-wrap gap-2">
-              <Badge tone="red">TRADITIONAL</Badge>
-              <Badge tone="mustard">BOLD LINES</Badge>
-              <Badge tone="teal">SOLID COLOR</Badge>
-            </div>
-
-            <h1 className="mt-4 font-display text-4xl font-black leading-tight sm:text-5xl">
-              Bold tattoos built to last.
+          {/* HERO RIGHT CARD (no badges) */}
+          <div className="rounded-flash border-4 border-ink card-paper p-6 shadow-flash">
+            <h1 className="font-display text-5xl font-black leading-[0.95] sm:text-6xl text-shadow-gold">
+              Sunshine Tattoo
             </h1>
 
-            <p className="mt-3 text-sm font-semibold leading-relaxed opacity-85">
-              Quick intro: what you specialize in, where you tattoo, and what
-              you love doing most. Keep it short so people hit the button.
+            <p className="mt-2 text-sm font-black opacity-80">
+              Traditional • Flash • Custom
             </p>
 
-            <div className="mt-5 flex flex-wrap gap-3">
+            <p className="mt-4 text-sm font-semibold leading-relaxed opacity-85">
+              Bold lines, solid color, and readable designs that heal well and
+              age right. Walk-ins when I can, appointments always welcome.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
               <Button
                 as="button"
                 onClick={() => setContactOpen(true)}
@@ -495,12 +440,28 @@ export default function App() {
               >
                 Book / Inquire
               </Button>
+
               <Button as="a" href="#portfolio" variant="secondary">
-                View Work
+                View Portfolio
               </Button>
             </div>
 
-          
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-flash border-2 border-ink bg-paper px-4 py-3 font-black shadow-flash">
+                <div className="text-xs opacity-70">Booking</div>
+                <div>Appointments</div>
+              </div>
+
+              <div className="rounded-flash border-2 border-ink bg-paper px-4 py-3 font-black shadow-flash">
+                <div className="text-xs opacity-70">Walk-ins</div>
+                <div>When available</div>
+              </div>
+
+              <div className="rounded-flash border-2 border-ink bg-paper px-4 py-3 font-black shadow-flash">
+                <div className="text-xs opacity-70">Location</div>
+                <div>Your City</div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -511,13 +472,14 @@ export default function App() {
             title="Pick a lane (or cruise them all)."
             tone="mustard"
           />
+
           <div className="grid gap-6 md:grid-cols-3">
             {styleCards.map((c) => (
               <StyleCard key={c.title} {...c} />
             ))}
           </div>
 
-          <div className="mt-8 rounded-flash border-4 border-ink bg-paper p-5 shadow-flash">
+          <div className="mt-8 rounded-flash border-4 border-ink card-paper p-5 shadow-flash">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <div className="font-display text-2xl font-black">
@@ -556,7 +518,7 @@ export default function App() {
       <footer className="border-t-4 border-ink bg-paper">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:grid-cols-3">
           <div className="space-y-2">
-            <div className="font-display text-xl font-black">
+            <div className="font-display text-xl font-black text-shadow-gold">
               Sunshine Tattoo
             </div>
             <div className="text-sm font-semibold opacity-80">
@@ -583,7 +545,7 @@ export default function App() {
             <div className="font-display text-xl font-black">Booking</div>
             <button
               onClick={() => setContactOpen(true)}
-              className="inline-flex rounded-flash border-[3px] border-ink bg-crimson px-5 py-3 font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="inline-flex rounded-flash border-[3px] border-ink bg-primary px-5 py-3 font-black text-paper shadow-flash hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
             >
               Open Contact
             </button>

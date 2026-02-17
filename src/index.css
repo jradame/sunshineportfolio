@@ -1,26 +1,77 @@
+/* src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   @apply bg-paper text-ink font-body;
 }
 
-
+/* coffee-stained / aged paper background */
 .paper-grain {
-  /* coffee-stained paper + subtle grain */
-  background-color: #f3e2c7; /* warm paper */
+  /* Coffee paper image */
   background-image:
-    radial-gradient(closest-side at 18% 22%, rgba(124, 74, 35, 0.18), transparent 60%),
-    radial-gradient(closest-side at 82% 30%, rgba(124, 74, 35, 0.14), transparent 55%),
-    radial-gradient(closest-side at 30% 78%, rgba(124, 74, 35, 0.12), transparent 58%),
-    radial-gradient(rgba(0,0,0,0.055) 1px, transparent 1px),
-    radial-gradient(rgba(0,0,0,0.035) 1px, transparent 1px);
-  background-size: auto, auto, auto, 18px 18px, 28px 28px;
-  background-position: center, center, center, 0 0, 12px 8px;
+    /* subtle dark wash for readability */
+    linear-gradient(rgba(17, 17, 17, 0.16), rgba(17, 17, 17, 0.16)),
+
+    url("./images/coffeepaper.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+  /* Optional: makes it feel like a fixed sheet behind the content
+  background-attachment: fixed;
+} */
+
+/* accent shadow (aged gold) */
+.text-shadow-gold {
+  text-shadow: 2px 2px 0 #C9A227;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply bg-paper text-ink font-body;
+}
+
+/* Coffee-stained / aged paper background */
+.paper-grain {
+  background-image:
+    linear-gradient(rgba(17, 17, 17, 0.12), rgba(17, 17, 17, 0.12)),
+    url("./images/coffeepaper.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Accent shadow (aged gold) */
+.text-shadow-gold {
+  text-shadow: 2px 2px 0 #c9a227;
+}
+
+.card-paper {
+  background-image:
+    linear-gradient(rgba(243, 230, 207, 0.92), rgba(243, 230, 207, 0.92)),
+    radial-gradient(rgba(17, 17, 17, 0.04) 1px, transparent 1px);
+  background-size: auto, 14px 14px;
+  background-position: 0 0, 0 0;
 }
 
