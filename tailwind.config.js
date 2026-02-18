@@ -4,34 +4,27 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Dark mode base
+        // Dark base
         night: "#0B0B0F",
-        ink: "#111118",
-        smoke: "#1B1B24",
+        ink: "#12121A",
 
         // Text
         chalk: "#F7F3EA",
-        muted: "#B9B4AA",
 
-        // Traditional pops (for buttons / accents)
-        primary: "#8B1E2D",   // oxblood
-        secondary: "#1F3A5F", // navy
-        accent: "#C9A227",    // aged gold
-        teal: "#1F7A7A",      // teal pop
+        // Pop colors (traditional-ish)
+        primary: "#8B1E2D", // oxblood red
+        accent: "#C9A227",  // aged gold (optional)
+        teal: "#1F7A7A",    // teal pop (optional)
       },
-
       borderRadius: {
         flash: "14px",
       },
-
-      boxShadow: {
-        soft: "0 18px 50px rgba(0,0,0,0.45)",
-      },
-
       fontFamily: {
-        // Your local OTF is used by @font-face in index.css
-        display: ["TraditionalTattoo", "Rye", "serif"],
-        body: ["Space Grotesk", "system-ui", "sans-serif"],
+        display: ["Rye", "ui-serif", "Georgia", "serif"],
+        body: ["Space Grotesque", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
+      boxShadow: {
+        soft: "0 20px 60px rgba(0,0,0,.45)",
       },
     },
   },

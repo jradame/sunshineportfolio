@@ -8,6 +8,17 @@ import blackworkImg from "./images/blackskull.png";
 const avatarUrl =
   "https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&w=200&q=80";
 
+/**
+ * STEP 2 / OPTION A:
+ * Keep everything NOT live, but wire up integration hooks.
+ */
+const CONTACT_LIVE = false; // ✅ Option A: stays false for now
+
+// Later you’ll set these to real values.
+// If CONTACT_LIVE stays false, these are never called.
+const CALENDLY_URL = "https://calendly.com/yourname/consult"; // placeholder
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xxxxx"; // placeholder
+
 const styleCards = [
   {
     title: "Traditional",
@@ -55,6 +66,37 @@ function IconArrow() {
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+function Toast({ toast, onClose }) {
+  useEffect(() => {
+    if (!toast) return;
+    const t = window.setTimeout(onClose, 2400);
+    return () => window.clearTimeout(t);
+  }, [toast, onClose]);
+
+  if (!toast) return null;
+
+  const tone =
+    toast.type === "success"
+      ? "bg-emerald-500/15 ring-1 ring-emerald-400/20 text-emerald-100"
+      : "bg-red-500/15 ring-1 ring-red-400/20 text-red-100";
+
+  return (
+    <div className="fixed bottom-5 left-1/2 z-[60] w-[92%] max-w-md -translate-x-1/2">
+      <div className={cx("rounded-2xl px-4 py-3 shadow-soft backdrop-blur", tone)}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="text-sm font-semibold">{toast.message}</div>
+          <button
+            onClick={onClose}
+            className="rounded-lg bg-white/10 px-2 py-1 text-xs font-black text-chalk hover:bg-white/15"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -128,9 +170,7 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
         aria-label={title}
       >
         <div className="flex items-center justify-between border-b border-white/10 p-4">
-          <h2 className="font-display text-2xl font-black tracking-wide">
-            {title}
-          </h2>
+          <h2 className="text-lg font-black tracking-wide">{title}</h2>
           <button
             onClick={startClose}
             className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm font-black hover:bg-white/10"
@@ -166,6 +206,202 @@ function Button({ as = "button", href, onClick, children, variant = "primary" })
   );
 }
 
+function DisabledCTA({ children, title = "Coming soon" }) {
+  return (
+    <button
+      type="button"
+      disabled
+      title={title}
+      className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-flash bg-white/10 px-5 py-3 font-black text-white/70 ring-1 ring-white/10 opacity-60"
+    >
+      {children}
+      <IconArrow />
+    </button>
+  );
+}
+
+function Field({ label, error, children }) {
+  return (
+    <label className="grid gap-1 text-sm font-semibold text-white/85">
+      <span className="font-black text-chalk">{label}</span>
+      {children}
+      {error ? <span className="text-xs text-red-300">{error}</span> : null}
+    </label>
+  );
+}
+
+function SpamProtectionPlaceholder() {
+  return (
+    <div className="mt-3 rounded-2xl bg-black/25 p-3 ring-1 ring-white/10">
+      <div className="flex items-start gap-3">
+        <div className="mt-1 h-5 w-5 rounded-md bg-white/10 ring-1 ring-white/10" />
+        <div>
+          <div className="text-sm font-black text-chalk">
+            Spam protection (Turnstile)
+          </div>
+          <div className="text-xs font-semibold text-white/60">
+            Placeholder only — we’ll enable when the form goes live.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+async function submitInquiry({ name, email, message }) {
+  // This function is never called while CONTACT_LIVE === false.
+  const res = await fetch(FORMSPREE_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ name, email, message }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || "Submission failed");
+  }
+}
+
+function ContactForm({ live = false, onToast }) {
+  const [values, setValues] = useState({ name: "", email: "", message: "" });
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    message: false,
+  });
+  const [status, setStatus] = useState("idle"); // idle | submitting | success
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim());
+  const nameOk = values.name.trim().length >= 2;
+  const msgOk = values.message.trim().length >= 10;
+
+  const errors = {
+    name: touched.name && !nameOk ? "Name must be at least 2 characters." : "",
+    email: touched.email && !emailOk ? "Enter a valid email address." : "",
+    message:
+      touched.message && !msgOk ? "Message must be at least 10 characters." : "",
+  };
+
+  const formValid = nameOk && emailOk && msgOk;
+
+  const onChange = (key) => (e) => {
+    const v = e.target.value;
+    setValues((prev) => ({ ...prev, [key]: v }));
+  };
+
+  const onBlur = (key) => () => {
+    setTouched((prev) => ({ ...prev, [key]: true }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setTouched({ name: true, email: true, message: true });
+    if (!formValid) return;
+
+    try {
+      setStatus("submitting");
+
+      if (!live) {
+        // Step 2/A: simulate a real submission (UX complete)
+        await new Promise((r) => setTimeout(r, 700));
+      } else {
+        await submitInquiry(values);
+      }
+
+      setStatus("success");
+      onToast?.({
+        type: "success",
+        message: live ? "Inquiry sent ✅" : "Inquiry (demo) sent ✅",
+      });
+
+      setTimeout(() => {
+        setStatus("idle");
+        setValues({ name: "", email: "", message: "" });
+        setTouched({ name: false, email: false, message: false });
+      }, 1200);
+    } catch (err) {
+      setStatus("idle");
+      onToast?.({
+        type: "error",
+        message: "Couldn’t send. Try again in a sec.",
+      });
+      console.error(err);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={onSubmit}
+      className="mt-4 rounded-2xl bg-white/[0.06] p-4 ring-1 ring-white/10"
+    >
+      <div className="text-lg font-black text-chalk">Inquiry Form</div>
+      <p className="mt-1 text-xs font-semibold text-white/60">
+        Portfolio-ready UX now ✅ — backend later.
+      </p>
+
+      <div className="mt-4 grid gap-3">
+        <Field label="Name" error={errors.name}>
+          <input
+            value={values.name}
+            onChange={onChange("name")}
+            onBlur={onBlur("name")}
+            className="rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm font-semibold text-chalk outline-none focus:border-white/25 focus:ring-4 focus:ring-primary/20"
+            placeholder="Your name"
+            autoComplete="name"
+          />
+        </Field>
+
+        <Field label="Email" error={errors.email}>
+          <input
+            value={values.email}
+            onChange={onChange("email")}
+            onBlur={onBlur("email")}
+            className="rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm font-semibold text-chalk outline-none focus:border-white/25 focus:ring-4 focus:ring-primary/20"
+            placeholder="you@email.com"
+            type="email"
+            autoComplete="email"
+          />
+        </Field>
+
+        <Field label="What are you thinking?" error={errors.message}>
+          <textarea
+            value={values.message}
+            onChange={onChange("message")}
+            onBlur={onBlur("message")}
+            className="min-h-[120px] rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm font-semibold text-chalk outline-none focus:border-white/25 focus:ring-4 focus:ring-primary/20"
+            placeholder="Placement, size, reference, budget, dates…"
+          />
+        </Field>
+
+        {/* Step 2: spam placeholder */}
+        <SpamProtectionPlaceholder />
+
+        <button
+          type="submit"
+          disabled={!formValid || status === "submitting"}
+          className={cx(
+            "mt-2 inline-flex items-center justify-center gap-2 rounded-flash px-5 py-3 font-black transition active:translate-y-[1px]",
+            !formValid || status === "submitting"
+              ? "cursor-not-allowed bg-white/10 text-white/60 ring-1 ring-white/10 opacity-80"
+              : "bg-primary text-chalk hover:bg-primary/90 shadow-soft"
+          )}
+        >
+          {status === "submitting"
+            ? "Sending..."
+            : status === "success"
+            ? "Sent ✔️"
+            : "Send Inquiry"}
+          <IconArrow />
+        </button>
+
+        <div className="text-xs font-semibold text-white/55">
+          When you’re ready: flip CONTACT_LIVE = true + add your Formspree URL.
+        </div>
+      </div>
+    </form>
+  );
+}
+
 function StyleCard({ title, desc, img, href }) {
   return (
     <a
@@ -174,14 +410,12 @@ function StyleCard({ title, desc, img, href }) {
     >
       <div className="relative h-52 w-full">
         <img src={img} alt={title} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
       </div>
 
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-display text-2xl font-black text-chalk">
-            {title}
-          </h3>
+          <h3 className="text-lg font-black text-chalk">{title}</h3>
           <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black ring-1 ring-white/10 text-chalk">
             View
           </span>
@@ -195,25 +429,23 @@ function StyleCard({ title, desc, img, href }) {
 export default function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [toast, setToast] = useState(null);
   const year = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    // ✅ Body font (IBM Plex Sans) applied globally
-    <div className="font-body min-h-screen text-chalk">
+    <div className="min-h-screen text-chalk font-body">
+      <Toast toast={toast} onClose={() => setToast(null)} />
+
       {/* HEADER */}
       <header className="sticky top-0 z-40 border-b border-white/10 bg-night/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 overflow-hidden rounded-full ring-1 ring-white/15">
-              <img
-                src={avatarUrl}
-                alt="Artist portrait"
-                className="h-full w-full object-cover"
-              />
+              <img src={avatarUrl} alt="Artist portrait" className="h-full w-full object-cover" />
             </div>
 
             <div>
-              <div className="font-display text-3xl font-black text-glow">
+              <div className="font-display text-2xl font-black text-glow">
                 Sunshine Tattoo
               </div>
               <div className="text-xs font-semibold text-white/70">
@@ -275,58 +507,78 @@ export default function App() {
         side="right"
         title="Booking / Contact"
       >
-        <div className="space-y-3 text-sm font-semibold text-white/85">
-          <div>Email: coming soon</div>
-          <div>Instagram: coming soon</div>
-          <div className="pt-2 text-xs text-white/60">
-            When you’re ready, we’ll wire this into a real booking form.
-          </div>
-        </div>
-      </SlidePanel>
-
-      {/* MAIN */}
-      <main className="mx-auto max-w-6xl px-4 py-10">
-        {/* HERO */}
-        <section className="grid gap-6 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 shadow-soft">
-            <img
-              src={heroTattooingUrl}
-              alt="Tattooing in progress"
-              className="block h-auto w-full object-cover"
-            />
-          </div>
-
-          <div className="rounded-2xl bg-white/[0.06] p-6 ring-1 ring-white/10 shadow-soft">
-            <h1 className="font-display text-5xl font-black leading-tight text-glow">
-              TATTOOS THAT LAST
-            </h1>
-
-            <p className="mt-3 text-sm font-semibold text-white/75">
-              Quick intro: what you specialize in, where you tattoo, and what
-              you love doing most.
+        <div className="space-y-4">
+          <div className="rounded-2xl bg-white/[0.06] p-4 ring-1 ring-white/10">
+            <div className="text-lg font-black text-chalk">Quick actions</div>
+            <p className="mt-1 text-xs font-semibold text-white/60">
+              Step 2/A: still not live — but ready to flip on anytime.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button
-                as="button"
-                onClick={() => setContactOpen(true)}
-                variant="primary"
-              >
-                Book / Inquire
-              </Button>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {CONTACT_LIVE ? (
+                <Button as="a" href={CALENDLY_URL} variant="secondary">
+                  Book a Consult
+                </Button>
+              ) : (
+                <DisabledCTA title="Add your Calendly link when ready">
+                  Book a Consult
+                </DisabledCTA>
+              )}
 
               <Button as="a" href="#portfolio" variant="secondary">
                 View Portfolio
               </Button>
             </div>
           </div>
+
+          <ContactForm
+            live={CONTACT_LIVE}
+            onToast={(t) => setToast(t)}
+          />
+        </div>
+      </SlidePanel>
+
+      {/* MAIN */}
+      <main className="mx-auto max-w-6xl px-4 py-10">
+        {/* HERO (Option A: full image spanning section) */}
+        <section className="relative overflow-hidden rounded-2xl ring-1 ring-white/10 bg-white/[0.04] shadow-soft">
+          <img
+            src={heroTattooingUrl}
+            alt="Tattooing in progress"
+            className="h-[72vh] min-h-[520px] w-full object-cover"
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />
+
+          <div className="absolute inset-0 flex items-end">
+            <div className="mx-auto w-full max-w-6xl px-4 pb-10 sm:pb-14">
+              <div className="max-w-xl">
+                <h1 className="font-display text-5xl font-black leading-[0.95] text-chalk text-glow sm:text-6xl">
+                  TATTOOS THAT LAST
+                </h1>
+
+                <p className="mt-4 text-sm font-semibold text-white/75 sm:text-base">
+                  Traditional flash + custom classics. Bold lines, solid color, clean heals.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Button as="button" onClick={() => setContactOpen(true)} variant="primary">
+                    Book / Inquire
+                  </Button>
+
+                  <Button as="a" href="#portfolio" variant="secondary">
+                    View Portfolio
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* PORTFOLIO */}
         <section id="portfolio" className="mt-14">
-          <h2 className="font-display text-4xl font-black text-glow">
-            Portfolio
-          </h2>
+          <h2 className="font-display text-3xl font-black text-glow">Portfolio</h2>
           <p className="mt-2 text-sm font-semibold text-white/70">
             Placeholders for now — we’ll replace with your real work next.
           </p>
@@ -344,9 +596,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-4 py-10">
           <div className="grid gap-6 sm:grid-cols-3">
             <div>
-              <div className="font-display text-2xl font-black">
-                Sunshine Tattoo
-              </div>
+              <div className="text-lg font-black">Sunshine Tattoo</div>
               <div className="mt-2 text-sm font-semibold text-white/70">
                 Tattooing at <span className="underline">Shop Name</span>
               </div>
@@ -369,6 +619,7 @@ export default function App() {
               >
                 BOOKING <IconArrow />
               </button>
+
               <div className="mt-4 text-xs font-semibold text-white/50">
                 © {year} • All work belongs to the artist
               </div>
