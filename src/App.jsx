@@ -114,12 +114,13 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
         )}
         aria-label="Close overlay"
       />
+
       <aside
         className={cx(
-          "absolute top-0 h-full w-[92%] max-w-md bg-zinc-950 text-zinc-100",
-          "border-l border-white/10 shadow-2xl",
+          "absolute top-0 h-full w-[92%] max-w-md bg-ink text-chalk",
+          "border-white/10 shadow-soft",
           "transition-transform duration-200 ease-out will-change-transform",
-          side === "left" ? "left-0 border-r border-white/10" : "right-0",
+          side === "left" ? "left-0 border-r" : "right-0 border-l",
           panelTransform
         )}
         role="dialog"
@@ -127,7 +128,9 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
         aria-label={title}
       >
         <div className="flex items-center justify-between border-b border-white/10 p-4">
-          <h2 className="text-lg font-black tracking-wide">{title}</h2>
+          <h2 className="font-display text-2xl font-black tracking-wide">
+            {title}
+          </h2>
           <button
             onClick={startClose}
             className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm font-black hover:bg-white/10"
@@ -144,12 +147,15 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
 
 function Button({ as = "button", href, onClick, children, variant = "primary" }) {
   const Comp = as;
+
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-black transition active:translate-y-[1px]";
+    "inline-flex items-center justify-center gap-2 rounded-flash px-5 py-3 font-black transition active:translate-y-[1px]";
+
   const styles =
     variant === "primary"
-      ? "bg-red-600 text-white shadow-lg shadow-black/30 hover:bg-red-500"
-      : "bg-white/10 text-white border border-white/10 hover:bg-white/15";
+      ? "bg-primary text-chalk hover:bg-primary/90 shadow-soft"
+      : "bg-white/10 text-chalk border border-white/10 hover:bg-white/15";
+
   const props = Comp === "a" ? { href } : { onClick };
 
   return (
@@ -164,20 +170,23 @@ function StyleCard({ title, desc, img, href }) {
   return (
     <a
       href={href}
-      className="group block overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 shadow-xl shadow-black/30 hover:bg-white/[0.08] transition"
+      className="group block overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 shadow-soft hover:bg-white/[0.08] transition"
     >
-      <div className="relative h-48 w-full">
+      <div className="relative h-52 w-full">
         <img src={img} alt={title} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
       </div>
-      <div className="p-4 text-white">
+
+      <div className="p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-black">{title}</h3>
-          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black ring-1 ring-white/10">
+          <h3 className="font-display text-2xl font-black text-chalk">
+            {title}
+          </h3>
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black ring-1 ring-white/10 text-chalk">
             View
           </span>
         </div>
-        <p className="mt-2 text-sm font-semibold text-white/75">{desc}</p>
+        <p className="mt-2 text-sm font-semibold text-white/70">{desc}</p>
       </div>
     </a>
   );
@@ -189,9 +198,10 @@ export default function App() {
   const year = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    // ✅ Body font (IBM Plex Sans) applied globally
+    <div className="font-body min-h-screen text-chalk">
       {/* HEADER */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/80 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-night/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 overflow-hidden rounded-full ring-1 ring-white/15">
@@ -201,8 +211,9 @@ export default function App() {
                 className="h-full w-full object-cover"
               />
             </div>
+
             <div>
-              <div className="text-lg font-black leading-none">
+              <div className="font-display text-3xl font-black text-glow">
                 Sunshine Tattoo
               </div>
               <div className="text-xs font-semibold text-white/70">
@@ -214,19 +225,21 @@ export default function App() {
           <nav className="flex items-center gap-2">
             <a
               href="#portfolio"
-              className="hidden rounded-xl bg-white/10 px-3 py-2 text-sm font-black ring-1 ring-white/10 hover:bg-white/15 sm:inline-flex"
+              className="hidden rounded-flash bg-white/10 px-3 py-2 text-sm font-black ring-1 ring-white/10 hover:bg-white/15 sm:inline-flex"
             >
               Portfolio
             </a>
+
             <button
               onClick={() => setAboutOpen(true)}
-              className="rounded-xl bg-white/10 px-3 py-2 text-sm font-black ring-1 ring-white/10 hover:bg-white/15"
+              className="rounded-flash bg-white/10 px-3 py-2 text-sm font-black ring-1 ring-white/10 hover:bg-white/15"
             >
               About
             </button>
+
             <button
               onClick={() => setContactOpen(true)}
-              className="rounded-xl bg-red-600 px-3 py-2 text-sm font-black text-white hover:bg-red-500"
+              className="rounded-flash bg-primary px-3 py-2 text-sm font-black text-chalk hover:bg-primary/90"
             >
               Contact
             </button>
@@ -246,14 +259,12 @@ export default function App() {
             Drop your quick bio here: what you love tattooing, where you work,
             and how you book.
           </p>
-          <div className="rounded-xl bg-white/5 p-4 ring-1 ring-white/10">
-            <div className="text-base font-black text-white">Specialties</div>
-            <ul className="mt-2 list-disc pl-5 text-white/80">
-              <li>American Traditional</li>
-              <li>Flash + small bangers</li>
-              <li>Custom classic motifs</li>
-            </ul>
-          </div>
+
+          <ul className="list-disc pl-5 text-white/75">
+            <li>American Traditional</li>
+            <li>Flash + small bangers</li>
+            <li>Custom classic motifs</li>
+          </ul>
         </div>
       </SlidePanel>
 
@@ -264,17 +275,12 @@ export default function App() {
         side="right"
         title="Booking / Contact"
       >
-        <div className="space-y-4 text-sm font-semibold text-white/85">
-          <div className="rounded-xl bg-white/5 p-4 ring-1 ring-white/10">
-            <div className="text-base font-black text-white">Fast contact</div>
-            <div className="mt-2 space-y-2 text-white/80">
-              <div>Email: coming soon</div>
-              <div>Instagram: coming soon</div>
-            </div>
+        <div className="space-y-3 text-sm font-semibold text-white/85">
+          <div>Email: coming soon</div>
+          <div>Instagram: coming soon</div>
+          <div className="pt-2 text-xs text-white/60">
+            When you’re ready, we’ll wire this into a real booking form.
           </div>
-          <p className="text-xs text-white/60">
-            When you’re ready, we’ll wire this to a real form (Formspree/EmailJS).
-          </p>
         </div>
       </SlidePanel>
 
@@ -282,7 +288,7 @@ export default function App() {
       <main className="mx-auto max-w-6xl px-4 py-10">
         {/* HERO */}
         <section className="grid gap-6 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 shadow-2xl shadow-black/40">
+          <div className="overflow-hidden rounded-2xl bg-white/[0.06] ring-1 ring-white/10 shadow-soft">
             <img
               src={heroTattooingUrl}
               alt="Tattooing in progress"
@@ -290,18 +296,25 @@ export default function App() {
             />
           </div>
 
-          <div className="rounded-2xl bg-white/[0.06] p-6 ring-1 ring-white/10 shadow-2xl shadow-black/40">
-            <h1 className="text-4xl font-black leading-tight sm:text-5xl">
-              Traditional work with bold color pops.
+          <div className="rounded-2xl bg-white/[0.06] p-6 ring-1 ring-white/10 shadow-soft">
+            <h1 className="font-display text-5xl font-black leading-tight text-glow">
+              TATTOOS THAT LAST
             </h1>
+
             <p className="mt-3 text-sm font-semibold text-white/75">
-              Quick intro: what you specialize in, where you tattoo, and what you love doing most.
+              Quick intro: what you specialize in, where you tattoo, and what
+              you love doing most.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button as="button" onClick={() => setContactOpen(true)} variant="primary">
+              <Button
+                as="button"
+                onClick={() => setContactOpen(true)}
+                variant="primary"
+              >
                 Book / Inquire
               </Button>
+
               <Button as="a" href="#portfolio" variant="secondary">
                 View Portfolio
               </Button>
@@ -311,9 +324,11 @@ export default function App() {
 
         {/* PORTFOLIO */}
         <section id="portfolio" className="mt-14">
-          <h2 className="text-3xl font-black">Portfolio</h2>
+          <h2 className="font-display text-4xl font-black text-glow">
+            Portfolio
+          </h2>
           <p className="mt-2 text-sm font-semibold text-white/70">
-            Placeholder images for now — we’ll replace with your real work next.
+            Placeholders for now — we’ll replace with your real work next.
           </p>
 
           <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -324,50 +339,43 @@ export default function App() {
         </section>
       </main>
 
-      {/* FOOTER (this WILL render) */}
-      <footer className="mt-16 border-t border-white/10 bg-zinc-950/60">
-  <div className="mx-auto max-w-6xl px-4 py-10">
-    <div className="grid gap-6 sm:grid-cols-3">
-      {/* Left */}
-      <div>
-        <div className="text-lg font-black">Sunshine Tattoo</div>
-        <div className="mt-2 text-sm font-semibold text-white/70">
-          Tattooing at <span className="underline">Saints and Sinners</span>
-        </div>
-        <div className="text-sm font-semibold text-white/70">
-          Carrollton, Texas • By appointment
-        </div>
-      </div>
+      {/* FOOTER */}
+      <footer className="mt-16 border-t border-white/10 bg-black/30">
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          <div className="grid gap-6 sm:grid-cols-3">
+            <div>
+              <div className="font-display text-2xl font-black">
+                Sunshine Tattoo
+              </div>
+              <div className="mt-2 text-sm font-semibold text-white/70">
+                Tattooing at <span className="underline">Shop Name</span>
+              </div>
+              <div className="text-sm font-semibold text-white/70">
+                City, State • By appointment
+              </div>
+            </div>
 
-      {/* Middle */}
-      <div className="sm:text-center">
-        <div className="text-lg font-black">Links</div>
-        <div className="mt-2 text-sm font-semibold text-white/70">
-          Instagram (coming soon) • Email (coming soon)
-        </div>
-        <div className="mt-3 text-xs font-semibold text-white/50">
-          Add Aftercare + Policies when ready.
-        </div>
-      </div>
+            <div className="sm:text-center">
+              <div className="text-lg font-black">Links</div>
+              <div className="mt-2 text-sm font-semibold text-white/70">
+                Instagram (coming soon) • Email (coming soon)
+              </div>
+            </div>
 
-      {/* Right */}
-      <div className="sm:text-right">
-        {/* <div className="text-lg font-black">Booking</div> */}
-        <button
-          onClick={() => setContactOpen(true)}
-          className="mt-3 inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-3 font-black text-white hover:bg-red-500 active:translate-y-[1px]"
-        >
-          BOOKING <IconArrow />
-        </button>
-
-        <div className="mt-4 text-xs font-semibold text-white/50">
-          © {year} • All work belongs to the artist
+            <div className="sm:text-right">
+              <button
+                onClick={() => setContactOpen(true)}
+                className="mt-3 inline-flex items-center justify-center gap-2 rounded-flash bg-primary px-5 py-3 font-black text-chalk hover:bg-primary/90 active:translate-y-[1px]"
+              >
+                BOOKING <IconArrow />
+              </button>
+              <div className="mt-4 text-xs font-semibold text-white/50">
+                © {year} • All work belongs to the artist
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</footer>
-
+      </footer>
     </div>
   );
 }
