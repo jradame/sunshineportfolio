@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import BookingModal from "./BookingModal.jsx";
 
 const avatarUrl =
   "https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&w=200&q=80";
-
-// Keep not-live for now
-const CONTACT_LIVE = false;
-const CALENDLY_URL = "https://calendly.com/yourname/consult";
 
 function cx(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -153,147 +150,6 @@ function SlidePanel({ open, onClose, side = "left", title, children }) {
   );
 }
 
-function Button({ as = "button", href, onClick, children, variant = "primary" }) {
-  const Comp = as;
-
-  const base =
-    "inline-flex items-center justify-center gap-2 rounded-flash px-5 py-3 font-black transition active:translate-y-[1px]";
-
-  const styles =
-    variant === "primary"
-      ? "bg-primary text-chalk hover:bg-primary/90 shadow-soft"
-      : "bg-white/10 text-chalk border border-white/10 hover:bg-white/15";
-
-  const props = Comp === "a" ? { href } : { onClick };
-
-  return (
-    <Comp {...props} className={cx(base, styles)}>
-      {children}
-      <IconArrow />
-    </Comp>
-  );
-}
-
-function DisabledCTA({ children, title = "Coming soon" }) {
-  return (
-    <button
-      type="button"
-      disabled
-      title={title}
-      className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-flash bg-white/10 px-5 py-3 font-black text-white/70 ring-1 ring-white/10 opacity-60"
-    >
-      {children}
-      <IconArrow />
-    </button>
-  );
-}
-
-function Field({ label, error, children }) {
-  return (
-    <label className="grid gap-1 text-sm font-semibold text-white/85">
-      <span className="font-black text-chalk">{label}</span>
-      {children}
-      {error ? <span className="text-xs text-red-300">{error}</span> : null}
-    </label>
-  );
-}
-
-function ContactForm({ live = false, onToast }) {
-  const [values, setValues] = useState({ name: "", email: "", message: "" });
-  const [touched, setTouched] = useState({ name: false, email: false, message: false });
-  const [status, setStatus] = useState("idle");
-
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim());
-  const nameOk = values.name.trim().length >= 2;
-  const msgOk = values.message.trim().length >= 10;
-  const formValid = nameOk && emailOk && msgOk;
-
-  const errors = {
-    name: touched.name && !nameOk ? "Name must be at least 2 characters." : "",
-    email: touched.email && !emailOk ? "Enter a valid email address." : "",
-    message: touched.message && !msgOk ? "Message must be at least 10 characters." : "",
-  };
-
-  const onChange = (key) => (e) => setValues((p) => ({ ...p, [key]: e.target.value }));
-  const onBlur = (key) => () => setTouched((p) => ({ ...p, [key]: true }));
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setTouched({ name: true, email: true, message: true });
-    if (!formValid) return;
-
-    setStatus("submitting");
-
-    // For now: demo submit always
-    await new Promise((r) => setTimeout(r, 650));
-
-    setStatus("success");
-    onToast?.({ type: "success", message: live ? "Inquiry sent ✅" : "Inquiry (demo) sent ✅" });
-
-    setTimeout(() => {
-      setStatus("idle");
-      setValues({ name: "", email: "", message: "" });
-      setTouched({ name: false, email: false, message: false });
-    }, 1100);
-  };
-
-  return (
-    <form onSubmit={onSubmit} className="mt-4 rounded-2xl bg-white/[0.06] p-4 ring-1 ring-white/10">
-      <div className="text-lg font-black text-chalk">Inquiry Form</div>
-      <p className="mt-1 text-xs font-semibold text-white/60">
-        Portfolio-ready UX now ✅ — backend later.
-      </p>
-
-      <div className="mt-4 grid gap-3">
-        <Field label="Name" error={errors.name}>
-          <input
-            value={values.name}
-            onChange={onChange("name")}
-            onBlur={onBlur("name")}
-            className="rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm font-semibold text-chalk outline-none focus:border-white/25 focus:ring-4 focus:ring-primary/20"
-            placeholder="Your name"
-          />
-        </Field>
-
-        <Field label="Email" error={errors.email}>
-          <input
-            value={values.email}
-            onChange={onChange("email")}
-            onBlur={onBlur("email")}
-            className="rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm font-semibold text-chalk outline-none focus:border-white/25 focus:ring-4 focus:ring-primary/20"
-            placeholder="you@email.com"
-            type="email"
-          />
-        </Field>
-
-        <Field label="What are you thinking?" error={errors.message}>
-          <textarea
-            value={values.message}
-            onChange={onChange("message")}
-            onBlur={onBlur("message")}
-            className="min-h-[120px] rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm font-semibold text-chalk outline-none focus:border-white/25 focus:ring-4 focus:ring-primary/20"
-            placeholder="Placement, size, reference, budget, dates…"
-          />
-        </Field>
-
-        <button
-          type="submit"
-          disabled={!formValid || status === "submitting"}
-          className={cx(
-            "mt-2 inline-flex items-center justify-center gap-2 rounded-flash px-5 py-3 font-black transition active:translate-y-[1px]",
-            !formValid || status === "submitting"
-              ? "cursor-not-allowed bg-white/10 text-white/60 ring-1 ring-white/10 opacity-80"
-              : "bg-primary text-chalk hover:bg-primary/90 shadow-soft"
-          )}
-        >
-          {status === "submitting" ? "Sending..." : status === "success" ? "Sent ✔️" : "Send Inquiry"}
-          <IconArrow />
-        </button>
-      </div>
-    </form>
-  );
-}
-
 export default function Layout({
   children,
   aboutOpen,
@@ -306,7 +162,6 @@ export default function Layout({
 }) {
   const location = useLocation();
 
-  // optional: close panels on route change
   useEffect(() => {
     setAboutOpen(false);
     setContactOpen(false);
@@ -340,7 +195,6 @@ export default function Layout({
               to="/#portfolio"
               className="hidden rounded-flash bg-white/10 px-3 py-2 text-sm font-black ring-1 ring-white/10 hover:bg-white/15 sm:inline-flex"
               onClick={(e) => {
-                // keep same-page anchor behavior when already home
                 if (location.pathname !== "/") return;
                 e.preventDefault();
                 const el = document.getElementById("portfolio");
@@ -382,38 +236,12 @@ export default function Layout({
         </div>
       </SlidePanel>
 
-      {/* CONTACT PANEL */}
-      <SlidePanel open={contactOpen} onClose={() => setContactOpen(false)} side="right" title="Booking / Contact">
-        <div className="space-y-4">
-          <div className="rounded-2xl bg-white/[0.06] p-4 ring-1 ring-white/10">
-            <div className="text-lg font-black text-chalk">Quick actions</div>
-            <p className="mt-1 text-xs font-semibold text-white/60">
-              Not live yet — but ready to flip on anytime.
-            </p>
-
-            <div className="mt-4 flex flex-wrap gap-3">
-              {CONTACT_LIVE ? (
-                <Button as="a" href={CALENDLY_URL} variant="secondary">
-                  Book a Consult
-                </Button>
-              ) : (
-                <DisabledCTA title="Add your Calendly link when ready">
-                  Book a Consult
-                </DisabledCTA>
-              )}
-
-              <Link
-                to="/"
-                className="inline-flex items-center justify-center gap-2 rounded-flash bg-white/10 px-5 py-3 font-black text-chalk ring-1 ring-white/10 hover:bg-white/15"
-              >
-                View Home <IconArrow />
-              </Link>
-            </div>
-          </div>
-
-          <ContactForm live={CONTACT_LIVE} onToast={(t) => setToast(t)} />
-        </div>
-      </SlidePanel>
+      {/* BOOKING MODAL */}
+      <BookingModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        onToast={(t) => setToast(t)}
+      />
 
       {/* PAGE */}
       {children}
