@@ -181,9 +181,11 @@ export default function Layout({
             </div>
 
             <div>
-              <Link to="/" className="block font-display text-2xl font-black text-glow hover:opacity-90">
-                SUNSHINE
-              </Link>
+         <Link to="/" className="block font-display text-2xl font-black text-accent text-glow hover:opacity-90">
+  SUNSHINE
+</Link>
+
+
               <div className="text-xs font-semibold text-white/70">
                 Traditional Tattoo • Your City (edit me)
               </div>

@@ -58,9 +58,10 @@ export default function Home({ setContactOpen }) {
         <div className="absolute inset-0 flex items-end">
           <div className="mx-auto w-full max-w-6xl px-4 pb-10 sm:pb-14">
             <div className="max-w-xl">
-              <h1 className="font-display text-5xl font-black leading-[0.95] text-chalk text-glow sm:text-6xl">
-                TATTOOS THAT LAST
-              </h1>
+              <h1 className="font-display text-5xl font-black leading-[0.95] text-accent text-glow sm:text-6xl">
+  TATTOOS THAT LAST
+</h1>
+
 
               <p className="mt-4 text-sm font-semibold text-white/75 sm:text-base">
                 Traditional flash + custom classics. Bold lines, solid color, clean heals.
@@ -93,7 +94,8 @@ export default function Home({ setContactOpen }) {
 
       {/* PORTFOLIO */}
       <section id="portfolio" className="mt-14">
-        <h2 className="font-display text-3xl font-black text-glow">Portfolio</h2>
+        <h2 className="font-display text-3xl font-black text-accent text-glow">Portfolio</h2>
+
         <p className="mt-2 text-sm font-semibold text-white/70">
           Tap a category to open its full gallery.
         </p>

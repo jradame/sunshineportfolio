@@ -24,8 +24,9 @@ body {
 
 /* Small utility helpers (match classes used in App.jsx) */
 .text-glow {
-  text-shadow: 0 0 28px rgba(247, 243, 234, 0.15);
+  text-shadow: 0 0 28px rgba(201, 162, 39, 0.45);
 }
+
 
 .shadow-soft {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
