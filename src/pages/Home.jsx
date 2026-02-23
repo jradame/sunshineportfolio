@@ -63,9 +63,10 @@ export default function Home({ setContactOpen }) {
 </h1>
 
 
-              <p className="mt-4 text-sm font-semibold text-white/75 sm:text-base">
-                Traditional flash + custom classics. Bold lines, solid color, clean heals.
-              </p>
+              <p className="mt-4 text-sm font-semibold text-amber-100/75 sm:text-base">
+  Traditional flash + custom classics. Bold lines, solid color, clean heals.
+</p>
+
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <button

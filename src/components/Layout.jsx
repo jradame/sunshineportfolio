@@ -186,9 +186,10 @@ export default function Layout({
 </Link>
 
 
-              <div className="text-xs font-semibold text-white/70">
-                Traditional Tattoo • Your City (edit me)
-              </div>
+              <div className="text-xs font-semibold text-amber-100/70">
+  Traditional Tattoo • Your City (edit me)
+</div>
+
             </div>
           </div>
 
